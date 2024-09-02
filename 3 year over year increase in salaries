@@ -1,0 +1,36 @@
+DROP TABLE IF EXISTS employee_salary;
+-- Create the table with employee name
+CREATE TABLE employee_salary (
+    employee_id INTEGER,
+    name VARCHAR(255),
+    year INTEGER,
+    salary INTEGER,
+    department VARCHAR(255)
+);
+
+-- Insert sample data with employee names
+INSERT INTO employee_salary (employee_id, name, year, salary, department) VALUES
+(125, 'John Doe', 2021, 50000, 'Sales'),
+(125, 'John Doe', 2022, 52000, 'Sales'),
+(125, 'John Doe', 2023, 54000, 'Sales'),
+(125, 'John Doe', 2024, 56000, 'Sales'),
+(102, 'Jane Smith', 2020, 45000, 'Marketing'),
+(102, 'Jane Smith', 2021, 47000, 'Marketing'),
+(102, 'Jane Smith', 2022, 49000, 'Marketing'),
+(102, 'Jane Smith', 2023, 51000, 'Marketing'),
+(165, 'Alice Johnson', 2021, 60000, 'Engineering'),
+(165, 'Alice Johnson', 2022, 62000, 'Engineering'),
+(165, 'Alice Johnson', 2023, 64000, 'Engineering'),
+(200, 'Bob Brown', 2021, 55000, 'HR'),
+(200, 'Bob Brown', 2022, 57000, 'HR'),
+(200, 'Bob Brown', 2023, 58000, 'HR');
+
+WITH cte1 AS (
+SELECT *,
+LAG(salary) OVER (PARTITION BY employee_id ORDER BY employee_id) AS prev_sal	
+FROM employee_salary )
+
+SELECT COUNT(employee_id), name, department FROM cte1
+WHERE salary > prev_sal 
+GROUP BY name, department 
+	HAVING  COUNT(employee_id) >=  ;
