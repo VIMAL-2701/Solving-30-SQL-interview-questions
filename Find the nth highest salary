@@ -1,0 +1,28 @@
+DROP TABLE IF EXISTS employees;
+CREATE TABLE Employees (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    salary DECIMAL(10, 2)
+);
+
+Q) -- Write SQL query to fetch nth highest salary!
+
+INSERT INTO Employees (name, salary) VALUES
+('Alice', 60000.00),
+('Bob', 75000.00),
+('Charlie', 50000.00),
+('David', 50000.00),
+('Eva', 95000.00),
+('Frank', 80000.00),
+('Grace', 80000.00),
+('Hank', 90000.00),
+('Hank', 75000.00);
+
+WITH cte1 AS (
+	SELECT 
+	*, 
+	DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+FROM employees )
+
+SELECT * FROM cte1
+WHERE rnk = 3
