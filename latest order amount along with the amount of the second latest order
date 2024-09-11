@@ -1,0 +1,33 @@
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders (
+    order_id INT,
+    customer_id INT,
+    order_date DATE,
+    order_amount DECIMAL(10, 2)
+);
+
+INSERT INTO orders (order_id, customer_id, order_date, order_amount) VALUES
+(1, 101, '2024-01-10', 150.00),
+(2, 101, '2024-02-15', 200.00),
+(3, 101, '2024-03-20', 180.00),
+(4, 102, '2024-01-12', 200.00),
+(5, 102, '2024-02-25', 250.00),
+(6, 102, '2024-03-10', 320.00),
+(7, 103, '2024-01-25', 400.00),
+(8, 103, '2024-02-15', 420.00);
+
+Q) Write a query to find each customer’s latest order amount along with the amount of the second latest order. 
+
+SELECT * ,
+ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date DESC) AS rn
+FROM orders )
+
+SELECT 
+  customer_id, 
+  order_amount,
+  CASE 
+    WHEN rn = 1 then 'latest_order_amount'  
+    ELSE 'second_latest_order_amount' 
+  END AS order_status
+FROM cte1
+WHERE rn <= 2 
